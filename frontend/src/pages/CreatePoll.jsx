@@ -1,4 +1,3 @@
-// src/pages/CreatePoll.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -10,16 +9,16 @@ export default function CreatePoll() {
   const [isAnonymous, setIsAnonymous] = useState(true);
   const [expiresAt, setExpiresAt] = useState('');
   const [questions, setQuestions] = useState([
-    { text: '', isMandatory: true, options: ['', ''] }
+    { question: '', isMandatory: true, options: ['', ''] }
   ]);
 
   const addQuestion = () => {
-    setQuestions([...questions, { text: '', isMandatory: true, options: ['', ''] }]);
+    setQuestions([...questions, { question: '', isMandatory: true, options: ['', ''] }]);
   };
 
   const handleQuestionText = (index, val) => {
     const copy = [...questions];
-    copy[index].text = val;
+    copy[index].question = val;
     setQuestions(copy);
   };
 
@@ -38,7 +37,6 @@ export default function CreatePoll() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Manual Catch Check: Agar koi field empty hai toh browser freeze nahi hoga, direct batayega
     if (!title.trim()) {
       alert("Please enter a Poll Title!");
       return;
@@ -48,9 +46,8 @@ export default function CreatePoll() {
       return;
     }
 
-    // Ensure options and questions aren't blank strings
     for (let i = 0; i < questions.length; i++) {
-      if (!questions[i].text.trim()) {
+      if (!questions[i].question.trim()) {
         alert(`Question #${i + 1} statement cannot be left empty!`);
         return;
       }
@@ -63,15 +60,23 @@ export default function CreatePoll() {
     }
 
     try {
-      const payload = { title, description, isAnonymous, expiresAt, questions };
+      const payload = { 
+        title, 
+        description, 
+        allowAnonymous: isAnonymous, 
+        expiresAt, 
+        questions 
+      };
+      
       await axios.post('http://localhost:5000/api/polls/create', payload, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
+      
       alert("New Poll Matrix Successfully Deployed!");
       navigate('/dashboard');
     } catch (err) {
       console.error(err);
-      alert(err.response?.data?.message || "Error deploying structure config. Check backend connectivity.");
+      alert(err.response?.data?.message || "Error deploying structure config.");
     }
   };
 
@@ -87,7 +92,6 @@ export default function CreatePoll() {
       </div>
       
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* CORE GENERAL SETTINGS */}
         <div className="space-y-4">
           <div>
             <label className="block text-[10px] uppercase font-bold tracking-widest text-slate-500 mb-1.5">Poll Title</label>
@@ -108,7 +112,6 @@ export default function CreatePoll() {
           </div>
         </div>
         
-        {/* PRIVACY & TIME META CONTROLS */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-950/40 p-4 rounded-xl border border-slate-800/60 items-center">
           <label className="flex items-center gap-3 cursor-pointer text-slate-300 text-xs font-semibold select-none">
             <input 
@@ -130,7 +133,6 @@ export default function CreatePoll() {
           </div>
         </div>
 
-        {/* DYNAMIC CARDS MAPPING GENERATOR */}
         <div className="space-y-5 pt-2">
           {questions.map((q, qIndex) => (
             <div key={qIndex} className="p-5 bg-slate-950/60 border border-slate-800/80 rounded-xl space-y-4 shadow-inner">
@@ -138,7 +140,7 @@ export default function CreatePoll() {
                 <input 
                   type="text" placeholder={`Question Statement #${qIndex + 1}`}
                   className="w-full p-3 bg-slate-900/60 border border-slate-800/60 rounded-xl text-xs focus:outline-none focus:border-blue-500 text-white font-medium"
-                  value={q.text} onChange={e => handleQuestionText(qIndex, e.target.value)}
+                  value={q.question} onChange={e => handleQuestionText(qIndex, e.target.value)}
                 />
                 <label className="text-[10px] uppercase font-black tracking-widest text-slate-400 flex items-center gap-1.5 shrink-0 px-2 select-none">
                   <input 
@@ -171,7 +173,6 @@ export default function CreatePoll() {
           ))}
         </div>
 
-        {/* CONTAINER APPENDER ACTION BUTTON */}
         <button 
           type="button" onClick={addQuestion} 
           className="w-full py-3 bg-slate-950/20 hover:bg-slate-950/60 border-dashed border border-slate-800 text-slate-400 hover:text-slate-200 rounded-xl text-xs font-bold transition-all duration-150"
@@ -179,7 +180,6 @@ export default function CreatePoll() {
           + Append New Question Object Card
         </button>
 
-        {/* DEPLOY BUTTON */}
         <button 
           type="submit" 
           className="w-full py-3.5 bg-rose-600 hover:bg-rose-500 text-white rounded-xl font-black text-sm tracking-widest uppercase shadow-lg shadow-rose-600/10 transition-all active:scale-[0.99] cursor-pointer"
