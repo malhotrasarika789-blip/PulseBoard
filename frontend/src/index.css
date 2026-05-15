@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+@theme {
+  /* Video ka exact premium attractive color palette */
+  --color-slate-950: #0a0b10;     /* Video jaisa rich dark theme canvas background */
+  --color-slate-900: #11131e;     /* Solid charcoal black-blue cards look */
+  --color-slate-800: #1d2032;     /* Subtle futuristic card borders */
+  
+  /* Cyber Rose/Crimson theme jo video ke buttons aur dynamic state me hai */
+  --color-blue-600: #f43f5e;      /* Bright Crimson Rose buttons aur lines */
+  --color-blue-500: #fb7185;      /* Hover glow glow-tint selection */
+  --color-blue-400: #fda4af;      /* Light rose accents */
+}
+
+@layer base {
+  body {
+    @apply bg-slate-950 text-slate-100 min-h-screen antialiased selection:bg-rose-500/20 selection:text-rose-200;
+    
+    /* Background grid background structure jo video ke premium design me dikhta hai */
+    background-image: 
+      linear-gradient(rgba(244, 63, 94, 0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(244, 63, 94, 0.02) 1px, transparent 1px),
+      radial-gradient(circle at 50% 0%, rgba(244, 63, 94, 0.07) 0%, transparent 60%);
+    background-size: 40px 40px, 40px 40px, 100% 100%;
+  }
+}
+
+/* Glassmorphism matrix overlays exactly replicating PulseBoard container aesthetics */
+.bg-slate-900\/60 {
+  background-color: rgba(17, 19, 30, 0.75) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.7) !important;
+}
+
+/* Borders padding controls to make lines look extremely thin and clean */
+.border-slate-800\/80 {
+  border-color: rgba(29, 32, 50, 0.8) !important;
+}
+
+/* Input boxes border activation glows */
+.focus\:border-blue-500\/80:focus {
+  border-color: rgba(244, 63, 94, 0.8) !important;
+  box-shadow: 0 0 20px rgba(244, 63, 94, 0.15) !important;
+}
+
+/* Dynamic glow elements for beautiful cards */
+.bg-gradient-to-r {
+  background-image: linear-gradient(to right, #ffffff, #94a3b8) !important;
+}
